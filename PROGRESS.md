@@ -8,24 +8,24 @@ Este archivo servirá para llevar un control estricto de las fases de desarrollo
 - [x] Definir Pila Tecnológica (Next.js, Supabase, Cloudinary).
 - [x] Escribir el PRD (`PRD.md`).
 - [x] Inicializar el proyecto Next.js + Tailwind.
-- [ ] Configurar repositorio de GitHub.
+- [x] Configurar repositorio de GitHub.
 
 ## Fase 2: Backend y Servicios Externos
-- [ ] Crear proyecto en Supabase y definir esquema de base de datos.
-- [ ] Configurar Row Level Security (Privacidad).
-- [ ] Configurar cuenta de Cloudinary y variables de entorno.
-- [ ] Crear los 2 usuarios (Login manual/mágico).
+- [x] Crear proyecto en Supabase y definir esquema de base de datos.
+- [x] Configurar Row Level Security (Privacidad).
+- [x] Configurar cuenta de Cloudinary y variables de entorno.
+- [x] Crear los 2 usuarios (Login manual/mágico).
 
 ## Fase 3: Desarrollo UI (Componentes Base)
-- [ ] Crear Layout principal (Navegación responsiva).
-- [ ] Componente: Contador principal.
-- [ ] Componente: Tarjetas de los Años.
-- [ ] Componente: Modal de subida de recuerdos (con compresión en frontend).
+- [x] Crear Layout principal (Navegación responsiva).
+- [x] Componente: Contador principal.
+- [x] Componente: Tarjetas de los Años.
+- [x] Componente: Modal de subida de recuerdos (con compresión en frontend y conexión a Cloudinary).
 - [ ] Componente: Grabadora de audio para el Buzón.
 
 ## Fase 4: Vistas y Lógica
 - [ ] Integrar vista Inicio (Dashboard) con Base de Datos.
-- [ ] Integrar vista de Álbumes (Pintrest grid).
+- [x] Integrar vista de Álbumes (Pintrest grid).
 - [ ] Integrar Mapa de Sueños interactivo.
 - [ ] Integrar lógica de "Cápsula del tiempo" (bloqueo por fecha).
 - [ ] Integrar "Nuestra Lista".

@@ -22,3 +22,7 @@ Estas reglas deben seguirse estrictamente durante todo el ciclo de vida del proy
 - **PROGRESS.md es la ley:** Cada vez que se termine una funcionalidad mayor (Fase), se debe marcar la casilla correspondiente en `PROGRESS.md`.
 - **Commits limpios:** Hacer commits frecuentes y con mensajes claros en español (ej. `feat: agregar compresion de imagenes en frontend`).
 - **Privacidad estricta:** No dejar tokens, claves de API (Supabase, Cloudinary) o correos electrónicos quemados (hardcoded) en el código. Siempre usar variables de entorno (`.env.local`).
+
+## 5. Notificaciones y Feedback Visual
+- **Prohibido usar `alert()`:** Todas las notificaciones de éxito, error o carga deben mostrarse utilizando la librería global `sonner` (`toast.success`, `toast.error`).
+- **Diseño del Toaster:** Las notificaciones deben respetar el diseño minimalista editorial (fondos blancos/claros, bordes sutiles, tipografía Inter sin colores chillones).
