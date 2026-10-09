@@ -24,7 +24,7 @@ export default function GalleryClient({ memories: initialMemories }: { memories:
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [activeMemoryIndex, setActiveMemoryIndex] = useState<number | null>(null);
 
-  // Sincronizar si initialMemories cambia
+  // Sincronizar si cambian las memorias iniciales
   useEffect(() => {
     setMemories(initialMemories);
   }, [initialMemories]);
@@ -79,7 +79,7 @@ export default function GalleryClient({ memories: initialMemories }: { memories:
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [activeMemoryIndex, handlePrev, handleNext]);
 
-  // Eliminar un recuerdo
+  // Eliminar un recuerdo (tanto en Supabase como en Cloudinary)
   const executeDelete = async (id: string) => {
     const toastId = toast.loading("Eliminando recuerdo...");
     try {
@@ -95,7 +95,7 @@ export default function GalleryClient({ memories: initialMemories }: { memories:
       // Actualizar estado local
       setMemories((prev) => prev.filter((m) => m.id !== id));
       setActiveMemoryIndex(null);
-      toast.success("Recuerdo eliminado de la galería.", { id: toastId });
+      toast.success("Recuerdo eliminado por completo.", { id: toastId });
       router.refresh();
     } catch (err: any) {
       console.error(err);
@@ -105,7 +105,8 @@ export default function GalleryClient({ memories: initialMemories }: { memories:
 
   const confirmDelete = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    toast("¿Seguro que deseas eliminar este recuerdo?", {
+    toast("¿Deseas eliminar este recuerdo permanentemente?", {
+      description: "Se borrará tanto de la aplicación como de la nube.",
       action: {
         label: "Eliminar",
         onClick: () => executeDelete(id),
@@ -118,8 +119,8 @@ export default function GalleryClient({ memories: initialMemories }: { memories:
   };
 
   return (
-    <div className="animate-in fade-in duration-700">
-      {/* Encabezado Principal */}
+    <div className="animate-in fade-in duration-700 relative pb-16">
+      {/* 1. Encabezado Editorial Centrado */}
       <div className="mb-10 md:mb-14 text-center">
         <p className="text-xs font-light tracking-widest uppercase text-gray-400 mb-3">La Colección</p>
         <h2 className="font-serif text-4xl md:text-6xl font-medium mb-4">Nuestra Historia</h2>
@@ -128,41 +129,29 @@ export default function GalleryClient({ memories: initialMemories }: { memories:
         </p>
       </div>
 
-      {/* Barra de Acciones: Pestañas de Años + Botón Agregar Recuerdo */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-6 mb-4 border-b border-gray-200 pb-4">
-        {/* Pestañas de Años */}
-        <div className="flex items-center gap-8 overflow-x-auto w-full sm:w-auto">
-          {years.map((year) => (
-            <button
-              key={year}
-              onClick={() => {
-                setSelectedYear(year);
-                setActiveMemoryIndex(null);
-              }}
-              className={`pb-2 text-sm tracking-widest uppercase transition-all relative whitespace-nowrap cursor-pointer ${
-                selectedYear === year ? "text-black font-medium" : "text-gray-400 hover:text-black"
-              }`}
-            >
-              {year}
-              {selectedYear === year && (
-                <span className="absolute bottom-[-17px] left-0 w-full h-[2px] bg-black"></span>
-              )}
-            </button>
-          ))}
-        </div>
-
-        {/* Botón Nuevo Recuerdo */}
-        <button
-          onClick={() => setIsUploadOpen(true)}
-          className="flex items-center gap-2 px-5 py-2.5 bg-black text-white text-xs uppercase tracking-widest hover:bg-neutral-800 transition-all cursor-pointer shadow-sm active:scale-95"
-        >
-          <Plus className="w-3.5 h-3.5" />
-          <span>Agregar recuerdo</span>
-        </button>
+      {/* 2. Pestañas de Años - Centradas y limpias */}
+      <div className="flex justify-center items-center gap-10 mb-4 border-b border-gray-200 pb-3">
+        {years.map((year) => (
+          <button
+            key={year}
+            onClick={() => {
+              setSelectedYear(year);
+              setActiveMemoryIndex(null);
+            }}
+            className={`pb-2 text-sm md:text-base tracking-widest uppercase transition-all relative cursor-pointer ${
+              selectedYear === year ? "text-black font-medium" : "text-gray-400 hover:text-black"
+            }`}
+          >
+            {year}
+            {selectedYear === year && (
+              <span className="absolute bottom-[-13px] left-0 w-full h-[2px] bg-black"></span>
+            )}
+          </button>
+        ))}
       </div>
 
-      {/* Contador sutil */}
-      <div className="text-left mb-10">
+      {/* 3. Contador Centrado y Discreto */}
+      <div className="text-center mb-12">
         <p className="text-[11px] font-light tracking-wider text-gray-400 uppercase">
           {filteredMemories.length === 1
             ? "1 momento guardado en este año"
@@ -170,10 +159,10 @@ export default function GalleryClient({ memories: initialMemories }: { memories:
         </p>
       </div>
 
-      {/* Grid de Imágenes (Masonry) */}
+      {/* 4. Grid de Imágenes (Masonry) */}
       {filteredMemories.length === 0 ? (
-        <div className="text-center py-24 border border-dashed border-gray-200 bg-white/40">
-          <p className="text-gray-400 font-light mb-4">Aún no hay recuerdos guardados en {selectedYear}.</p>
+        <div className="text-center py-24 border border-dashed border-gray-200 bg-white/40 max-w-xl mx-auto">
+          <p className="text-gray-400 font-light mb-4 text-sm">Aún no hay recuerdos guardados en {selectedYear}.</p>
           <button
             onClick={() => setIsUploadOpen(true)}
             className="text-xs uppercase tracking-widest text-black underline hover:text-gray-600 transition-colors cursor-pointer"
@@ -218,10 +207,10 @@ export default function GalleryClient({ memories: initialMemories }: { memories:
                     />
                   )}
 
-                  {/* Botón flotante para borrar en hover */}
+                  {/* Botón borrar en tarjeta: SOLO VISIBLE EN PC AL PASAR EL MOUSE (En celular está oculto para evitar toques accidentales) */}
                   <button
                     onClick={(e) => confirmDelete(e, memory.id)}
-                    className="absolute top-3 left-3 p-2 bg-white/90 hover:bg-rose-50 text-gray-500 hover:text-rose-600 shadow-md opacity-0 group-hover:opacity-100 transition-all cursor-pointer backdrop-blur-sm"
+                    className="hidden md:flex absolute top-3 left-3 p-2 bg-white/90 hover:bg-rose-50 text-gray-500 hover:text-rose-600 shadow-md opacity-0 group-hover:opacity-100 transition-all cursor-pointer backdrop-blur-sm pointer-events-none group-hover:pointer-events-auto"
                     title="Eliminar recuerdo"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -251,7 +240,19 @@ export default function GalleryClient({ memories: initialMemories }: { memories:
         </div>
       )}
 
-      {/* 1. VISOR EN PANTALLA COMPLETA (LIGHTBOX) */}
+      {/* 5. BOTÓN FLOTANTE "AGREGAR RECUERDO" (FAB)
+          Se ubica fijo abajo a la derecha: en celular queda perfecto para el pulgar,
+          y en PC se ve moderno sin arruinar el centrado de los títulos ni los años */}
+      <button
+        onClick={() => setIsUploadOpen(true)}
+        className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-40 bg-black text-white px-5 py-3.5 rounded-full shadow-2xl hover:bg-neutral-800 active:scale-95 transition-all flex items-center gap-2.5 cursor-pointer border border-white/10 group"
+        title="Agregar nuevo recuerdo"
+      >
+        <Plus className="w-4 h-4 transition-transform group-hover:rotate-90 duration-300" />
+        <span className="text-xs uppercase tracking-widest font-light">Agregar recuerdo</span>
+      </button>
+
+      {/* 6. VISOR EN PANTALLA COMPLETA (LIGHTBOX) */}
       {activeMemory && (
         <div
           className="fixed inset-0 z-[120] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-200"
@@ -273,7 +274,7 @@ export default function GalleryClient({ memories: initialMemories }: { memories:
                 e.stopPropagation();
                 handlePrev();
               }}
-              className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 p-3 text-gray-400 hover:text-white transition-colors cursor-pointer z-50 rounded-full hover:bg-white/10"
+              className="absolute left-3 md:left-8 top-1/2 -translate-y-1/2 p-3 text-gray-400 hover:text-white transition-colors cursor-pointer z-50 rounded-full hover:bg-white/10"
               title="Anterior (Flecha izquierda)"
             >
               <ChevronLeft className="w-7 h-7" />
@@ -287,7 +288,7 @@ export default function GalleryClient({ memories: initialMemories }: { memories:
                 e.stopPropagation();
                 handleNext();
               }}
-              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 p-3 text-gray-400 hover:text-white transition-colors cursor-pointer z-50 rounded-full hover:bg-white/10"
+              className="absolute right-3 md:right-8 top-1/2 -translate-y-1/2 p-3 text-gray-400 hover:text-white transition-colors cursor-pointer z-50 rounded-full hover:bg-white/10"
               title="Siguiente (Flecha derecha)"
             >
               <ChevronRight className="w-7 h-7" />
@@ -341,10 +342,11 @@ export default function GalleryClient({ memories: initialMemories }: { memories:
                   Subido por {getAuthorName(activeMemory.author_id)}
                 </span>
 
+                {/* Botón eliminar dentro del Lightbox: Disponible en PC y Celular */}
                 <button
                   onClick={(e) => confirmDelete(e, activeMemory.id)}
-                  className="flex items-center gap-1.5 text-rose-400 hover:text-rose-300 transition-colors cursor-pointer ml-4"
-                  title="Eliminar este recuerdo"
+                  className="flex items-center gap-1.5 text-rose-400 hover:text-rose-300 transition-colors cursor-pointer ml-3"
+                  title="Eliminar este recuerdo de forma permanente"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Eliminar</span>
