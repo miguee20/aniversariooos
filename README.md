@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nuestro Espacio 🤍
 
-## Getting Started
+Aplicación web privada, colaborativa y con diseño editorial creada para conmemorar el aniversario de relación de **Migue y Dani** (inicio: 12 de octubre de 2025 a las 02:00 AM).
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🛠️ Tecnologías y Arquitectura
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+* **Framework:** Next.js 16.4.0 (App Router, Turbopack, React 19).
+* **Diseño:** Tailwind CSS v4, Google Fonts (*Playfair Display* e *Inter*).
+* **Base de Datos & Auth:** Supabase (PostgreSQL con Row Level Security y sesiones SSR seguras).
+* **Media Storage:** Cloudinary (subidas firmadas y descargas nativas con `fl_attachment`).
+* **Notificaciones:** Sonner (estética minimalista editorial).
+* **Compresión en Cliente:** `browser-image-compression` (< 1MB antes de subir).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📂 Documentos de Referencia
 
-## Learn More
+* [PROGRESS.md](./PROGRESS.md): Estado detallado de las fases, lo completado y la hoja de ruta pendiente.
+* [RULES.md](./RULES.md): Reglas de arquitectura, diseño editorial, mobile-first y manejo de archivos.
+* [PRD.md](./PRD.md): Documento de requerimientos del producto y especificaciones funcionales.
+* [supabase_schema.sql](./supabase_schema.sql): Esquema SQL completo y políticas RLS de la base de datos.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 Inicio Rápido (Desarrollo Local)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clonar el repositorio:
+   ```bash
+   git clone https://github.com/miguee20/aniversariooos.git
+   cd aniversariooos
+   ```
 
-## Deploy on Vercel
+2. Instalar dependencias:
+   ```bash
+   npm install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Configurar variables de entorno en `.env.local`:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=tu_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=ek5d9qzb
+   NEXT_PUBLIC_CLOUDINARY_API_KEY=tu_api_key
+   CLOUDINARY_API_SECRET=tu_api_secret
+   ```
+
+4. Ejecutar el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
+
+5. Abrir [http://localhost:3000](http://localhost:3000) en el navegador.
